@@ -1,2 +1,3 @@
 # 2020-2_Django
-test
+---
+Experimental repository for learning Django.
