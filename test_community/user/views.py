@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.contrib.auth.hashers import make_password
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import make_password, check_password
 from .models import user
+from .forms import LoginForm
 
 # Create your views here.
 
@@ -28,3 +29,20 @@ def register(request):
             )
             new_user.save()
         return render(request, 'register.html', res_data)
+
+def login(request):
+    if(request.method == 'POST'):
+        form = LoginForm(request.POST)
+        if(form.is_valid()):
+            #session
+            return redirect('/')
+        
+    elif(request.method == 'GET'):
+        form = LoginForm()
+    return render(request, 'login.html', {'form':form})
+    
+def home(request):
+    user_id = request.session.get('user')
+    if(user_id):
+        login_user = user.objects.get(pk=user_id)
+    return HttpResponse(login_user.username)
