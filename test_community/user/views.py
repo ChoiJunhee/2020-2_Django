@@ -34,7 +34,7 @@ def login(request):
     if(request.method == 'POST'):
         form = LoginForm(request.POST)
         if(form.is_valid()):
-            #session
+            request.session['user'] = form.user_id
             return redirect('/')
         
     elif(request.method == 'GET'):
