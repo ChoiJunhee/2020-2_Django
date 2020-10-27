@@ -1,6 +1,6 @@
 from django import forms
 from .models import user
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import UserManager
 
 class LoginForm(forms.Form):
@@ -69,8 +69,11 @@ class RegisterForm(forms.Form):
             elif(password != re_password):
                 self.add_error('re_password', '비밀번호가 일치하지 않습니다.')
             else:
-                # USER 생성해야 하는 부분
-                
+                registUser = user(
+                    username=username,
+                    usermail=usermail,
+                    password=make_password(password))
+                registUser.save()
                 self.signed = True
         
 
