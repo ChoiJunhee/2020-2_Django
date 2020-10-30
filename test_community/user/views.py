@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import User
-from .forms import LoginForm, RegisterForm
+from .models import customUser
+#from .forms import LoginForm, RegisterForm
 
 # Create your views here.
 

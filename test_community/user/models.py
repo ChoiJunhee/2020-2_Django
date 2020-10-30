@@ -1,15 +1,15 @@
 from django.db import models
-from django.core.mail import send_mail
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 import uuid
 
 class customUserManager(BaseUserManager):
-    def create_user(self, email, nickname, password, **extra_fields):
+    def create_user(self, email, nickname, age, password, **extra_fields):
         try:
             user = self.model(
                 nickname = nickname,
                 email = email,
+                age = age
             )
             extra_fields.setdefault('is_active', True)
             extra_fields.setdefault('is_counseller', False)
@@ -34,7 +34,7 @@ class customUserManager(BaseUserManager):
             superuser.is_manager = True
             superuser.is_counseller = True
             superuser.is_active = True
-            superuser.saver()
+            superuser.save()
             return superuser
         except Exception as e:
             print(e)
@@ -43,17 +43,6 @@ class customUserManager(BaseUserManager):
 
 class customUser(AbstractBaseUser):
     # Default field : id, password, last_login
-    USER_LOGIN_TYPES = {
-        ('web', 'web'),
-        ('google', 'google'),
-    }
-
-    USER_TYPES = {
-        ('1', '이용자'),
-        ('2', '상담사'),
-        ('3', '매니저'),
-        ('4', 'ADMIN'),
-    }
 
     USER_AGE_CHOICE = (
         ('A', '~14'),
@@ -67,21 +56,21 @@ class customUser(AbstractBaseUser):
         ('I', '68~'),
     )
 
-    user_type = models.CharField(
+    
+
+    email = models.EmailField(max_length=64, null=False, unique=True)
+    nickname = models.CharField(max_length=16, unique=True)
+    age = models.CharField(
         max_length=10,
         choices = USER_AGE_CHOICE,
         default = USER_AGE_CHOICE[0][1]
     )
 
-    email = models.EmailField(max_length=64, null=False, unique=True)
-    nickname = models.CharField(max_length=16, unique=True)
-    
     is_active = models.BooleanField(default=True)
     is_counseller = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
     joind_date = models.DateTimeField(auto_now_add=True)
 
-    USERNAME_FIELD = 'nickname'
+    USERNAME_FIELD = 'email'
     objects = customUserManager()
