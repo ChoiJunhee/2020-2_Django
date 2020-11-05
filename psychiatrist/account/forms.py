@@ -49,7 +49,7 @@ class UserCreationForm(forms.ModelForm):
                 'placeholder': _('Ages'),
                 'required': 'True',
             }
-        ), required=True
+        ), 
     )
 
     password1 = forms.CharField(
@@ -101,7 +101,6 @@ class UserChangeForm(forms.ModelForm):
     )
     ages = forms.CharField(
         label = _('ages'),
-        required=True,
     )
 
     class Meta:
