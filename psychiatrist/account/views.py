@@ -33,7 +33,4 @@ def login(request):
 
     
 def home(request):
-    user_id = request.session.get('user')
-    if(user_id):
-        login_user = user.objects.get(pk=user_id)
-    return HttpResponse(login_user.username)
+    return render(request, 'home.html')
